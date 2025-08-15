@@ -1,0 +1,6 @@
+streamlit>=1.36
+pandas>=2.2
+numpy>=1.26
+numpy-financial>=1.0
+matplotlib>=3.8
+fpdf2>=2.7

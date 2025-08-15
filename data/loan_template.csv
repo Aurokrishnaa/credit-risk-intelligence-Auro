@@ -1,0 +1,4 @@
+LoanID,Borrower,Sector,Geography,LoanAmount,InterestRate,TermMonths,CreditScore,MonthlyIncome,CollateralType,CollateralValue,CurrentMarketValue,ExistingDTI,NOI,EBITDA
+L-001,Example Corp,Manufacturing,NY,250000,7.5,60,720,18000,Equipment,200000,190000,0.35,,
+L-002,Beacon Realty,Real Estate,CA,600000,6.9,120,770,50000,RealEstate,900000,880000,0.2,,
+L-003,Urban Hotels,Hospitality,NV,450000,10.5,96,605,24000,Real Estate,420000,380000,0.5,,

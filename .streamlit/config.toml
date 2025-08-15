@@ -1,0 +1,14 @@
+[theme]
+base = "light"
+primaryColor = "#0E7490"
+backgroundColor = "#F8FAFC"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#0F172A"
+
+# Optional: less jumpy animations on first render
+[client]
+toolbarMode = "minimal"
+
+# Optional: headless/server tweaks
+[server]
+runOnSave = true

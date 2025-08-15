@@ -1,0 +1,11 @@
+LoanID,Borrower,Sector,Geography,LoanAmount,InterestRate,TermMonths,CreditScore,MonthlyIncome,CollateralType,CollateralValue,CurrentMarketValue,ExistingDTI
+L-001,Alpha Co,Manufacturing,NY,250000,6.5,60,780,22000,Equipment,350000,340000,0.18
+L-002,Beacon Realty,Real Estate,CA,600000,6.9,120,770,50000,RealEstate,900000,880000,0.2
+L-003,Sovereign Fund,Healthcare,MA,180000,5.8,48,765,20000,Securities,250000,245000,0.16
+L-004,Gamma Inc,Healthcare,TX,120000,9.9,36,680,12000,AR,90000,90000,0.34
+L-005,Delta Retail,Retail,FL,200000,8.2,72,700,16000,Inventory,150000,140000,0.35
+L-006,Omega Logistics,Transport,IL,320000,8.2,84,710,30000,Equipment,280000,270000,0.33
+L-007,Beta LLC,Construction,CA,500000,9.5,84,640,35000,RealEstate,600000,540000,0.42
+L-008,Urban Hotels,Hospitality,NV,450000,10.5,96,605,24000,Real Estate,420000,380000,0.5
+L-009,StartX Labs,Technology,WA,150000,11.5,36,590,10000,Inventory,60000,50000,0.55
+L-010,Metro Stores,Retail,NJ,260000,11.0,60,610,13000,AR,120000,100000,0.52
