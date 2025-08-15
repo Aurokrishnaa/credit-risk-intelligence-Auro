@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import numpy_financial as npf
 from pathlib import Path
-import math, datetime
+# import math, datetime ---- if needed later, uncomment these
 
 # Matplotlib (single backend set for entire app)
 import matplotlib
@@ -28,7 +28,7 @@ MUTED = "#6B7280"
 BORDER = "#E6E8EB"
 
 # -------------------------
-# Branding (simple, unobtrusive)
+# Branding and author info
 # -------------------------
 AUTHOR_FULL  = "Aurokrishnaa R L"
 AUTHOR_SHORT = "Auro"
@@ -138,9 +138,6 @@ st.sidebar.caption("Tip: Presets fill shocks for you. Switch to Custom to fine-t
 st.session_state["preset"] = preset
 
 # -------------------------
-# Paths (define BEFORE any use)
-# -------------------------
-from pathlib import Path
 
 ROOT = Path(__file__).parent if "__file__" in globals() else Path.cwd()
 DATA_DIR = ROOT / "data"; DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -199,8 +196,21 @@ def first_year_interest(P, annual_rate, n_months):
 
 def choose_collateral_value(row):
     cmv = row.get("CurrentMarketValue", np.nan)
-    if pd.notna(cmv) and cmv > 0: return cmv
-    return row.get("CollateralValue", np.nan)
+    if pd.notna(cmv):
+        try:
+            cmv = float(cmv)
+            if cmv > 0:
+                return cmv
+        except:
+            pass
+    cv = row.get("CollateralValue", np.nan)
+    if pd.notna(cv):
+        try:
+            cv = float(cv)
+            return cv if cv > 0 else np.nan
+        except:
+            return np.nan
+    return np.nan
 
 def validate_rows(df):
     problems = []
@@ -559,6 +569,12 @@ work["TermMonths"] = work.get("TermMonths", pd.Series(dtype=float)).apply(_safe_
 # Ensure columns exist (df_norm already adds them, but keep extra-safe)
 if "Sector" not in work.columns: work["Sector"] = "Unknown"
 if "Geography" not in work.columns: work["Geography"] = "Unknown"
+# NEW: ensure LoanID exists to avoid KeyErrors in views/tables
+if "LoanID" not in work.columns:
+    work["LoanID"] = [f"L-{i+1:03d}" for i in range(len(work))]
+else:
+    work["LoanID"] = work["LoanID"].astype(str)
+
 
 # Use *effective* picks so we don't mutate widget state
 sector_eff = sector_pick
@@ -1611,7 +1627,7 @@ st.markdown(
         <a class="cr-btn primary" href="{LINKEDIN_URL}" target="_blank" rel="noopener noreferrer"> LinkedIn</a>
       </div>
     </div>
-   <div class="cr-foot-meta">© 2025 • Aurokrishnaa R L — MS Finance (Quant) · MBA Finance • Credit Risk Intelligence • v1.3</div>
+   <div class="cr-foot-meta">© 2025 • Aurokrishnaa R L — MS Finance (Quant) · MBA Finance • Credit Risk Intelligence • v1.3.0</div>
     """,
     unsafe_allow_html=True,
 )
