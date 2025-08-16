@@ -17,6 +17,10 @@ from io import BytesIO
 
 APP_VER = "v1.3.0"
 
+# Upload limits + required schema
+MAX_UPLOAD_MB = 200
+REQUIRED_COLS = ["LoanAmount", "InterestRate", "TermMonths"]  # minimal set for core math
+
 # -------------------------
 # Theme / Page
 # -------------------------
@@ -493,12 +497,36 @@ def _read_csv_safely(file_like) -> pd.DataFrame:
     raise last_err
 
 if uploaded is not None:
+    # --- size check (clean message, no traceback) ---
+    max_bytes = MAX_UPLOAD_MB * 1024 * 1024
+    file_size = getattr(uploaded, "size", None)
+    if file_size is not None and file_size > max_bytes:
+        st.error(f"File too large ({file_size/1024/1024:.1f} MB). Only files up to {MAX_UPLOAD_MB} MB are supported.")
+        st.info("Please use the provided template (click **Download CSV template** above), keep the exact column headers, export as UTF-8 CSV, then re-upload.")
+        st.stop()
+
+    # --- read CSV safely ---
     try:
-        st.session_state.loan_df = _read_csv_safely(uploaded)
-        st.success("File loaded.")
-    except Exception as e:
-        st.error(f"Could not read CSV: {e}")
-        st.info("Tip: Export as UTF-8, comma-delimited. In Numbers: File → Export To → CSV… → Advanced Options → Unicode (UTF-8), comma delimiter.")
+        df_try = _read_csv_safely(uploaded)
+    except Exception:
+        st.error("Unsupported or unreadable CSV.")
+        st.info("Please use the template (click **Download CSV template**), keep the same columns, and export as **UTF-8, comma-delimited**.")
+        st.stop()
+
+    # --- schema check (minimal required columns) ---
+    missing = [c for c in REQUIRED_COLS if c not in df_try.columns]
+    if missing:
+        st.error("Unsupported file format — required columns are missing.")
+        st.markdown(
+            "- **Missing required columns:** `" + "`, `".join(missing) + "`\n"
+            "- Use **loan_template.csv** (download above), keep the exact headers, and re-upload.\n"
+            f"- File size must be **≤ {MAX_UPLOAD_MB} MB**."
+        )
+        st.stop()
+
+    # looks good → accept it
+    st.session_state.loan_df = df_try
+    st.success("File loaded.")
 
 df = st.session_state.loan_df
 if df is None:
@@ -809,11 +837,11 @@ with tab_data:
     st.dataframe(
         disp[show_cols], use_container_width=True,
         column_config={
-            "LoanAmount": st.column_config.NumberColumn("Loan Amount", format="$%,.2f"),
-            "MonthlyPayment": st.column_config.NumberColumn("Monthly Payment", format="$%,.2f"),
-            "AnnualDebtService": st.column_config.NumberColumn("Annual Debt Service", format="$%,.2f"),
-            "Balance_12m": st.column_config.NumberColumn("Balance @ 12m", format="$%,.2f"),
-            "Interest_Y1": st.column_config.NumberColumn("Year-1 Interest", format="$%,.2f"),
+            "LoanAmount": st.column_config.NumberColumn("Loan Amount", format="$%.2f"),
+            "MonthlyPayment": st.column_config.NumberColumn("Monthly Payment", format="$%.2f"),
+            "AnnualDebtService": st.column_config.NumberColumn("Annual Debt Service", format="$%.2f"),
+            "Balance_12m": st.column_config.NumberColumn("Balance @ 12m", format="$%.2f"),
+            "Interest_Y1": st.column_config.NumberColumn("Year-1 Interest", format="$%.2f"),
             "InterestRate_%": st.column_config.NumberColumn("Interest Rate (%)", format="%.2f"),
             "LTV": st.column_config.NumberColumn("LTV", format="%.2f"),
             "DTI": st.column_config.NumberColumn("DTI", format="%.2f"),
@@ -843,8 +871,8 @@ with tab_base:
         column_config={
             "PD_12m": st.column_config.NumberColumn("PD (12m)", format="%.2f %%"),
             "LGD": st.column_config.NumberColumn("LGD", format="%.2f %%"),
-            "EAD_12m": st.column_config.NumberColumn("EAD (12m avg)", format="$%,.2f"),
-            "EL_12m": st.column_config.NumberColumn("EL (12m)", format="$%,.2f"),
+            "EAD_12m": st.column_config.NumberColumn("EAD (12m avg)", format="$%.2f"),
+            "EL_12m": st.column_config.NumberColumn("EL (12m)", format="$%.2f"),
         },
     )
     b1,b2,b3,b4 = st.columns(4)
@@ -870,8 +898,8 @@ with tab_stress:
         column_config={
             "PD_12m_st": st.column_config.NumberColumn("PD (12m, st)", format="%.2f %%"),
             "LGD_st": st.column_config.NumberColumn("LGD (st)", format="%.2f %%"),
-            "EAD_12m_st": st.column_config.NumberColumn("EAD (12m, st)", format="$%,.2f"),
-            "EL_12m_st": st.column_config.NumberColumn("EL (12m, st)", format="$%,.2f"),
+            "EAD_12m_st": st.column_config.NumberColumn("EAD (12m, st)", format="$%.2f"),
+            "EL_12m_st": st.column_config.NumberColumn("EL (12m, st)", format="$%.2f"),
         },
     )
     (total_ead_bv, wavg_pd_bv, total_el_bv, pct_high_bv) = base_kpis_view
@@ -1013,10 +1041,10 @@ with tab_pricing:
         column_config={
             "PD_12m_st": st.column_config.NumberColumn("PD (12m, st)", format="%.2f %%"),
             "LGD_st": st.column_config.NumberColumn("LGD (st)", format="%.2f %%"),
-            "EAD_12m_st": st.column_config.NumberColumn("EAD (12m, st)", format="$%,.2f"),
-            "EL_12m_st": st.column_config.NumberColumn("EL (12m, st)", format="$%,.2f"),
+            "EAD_12m_st": st.column_config.NumberColumn("EAD (12m, st)", format="$%.2f"),
+            "EL_12m_st": st.column_config.NumberColumn("EL (12m, st)", format="$%.2f"),
             "EL_rate_st": st.column_config.NumberColumn("EL rate (st)", format="%.2f %%"),
-            "SuggestedSpread_bps": st.column_config.NumberColumn("Suggested spread (bps)", format="%,.0f"),
+            "SuggestedSpread_bps": st.column_config.NumberColumn("Suggested spread (bps)", format="%.0f"),
             "SuggestedAllInRate_pct": st.column_config.NumberColumn("All-in rate (%)", format="%.2f"),
         },
     )
@@ -1063,14 +1091,27 @@ with tab_reports:
         unsafe_allow_html=True,
     )
 
-    st.subheader("Report Mode (Showcase)")
+    import streamlit.components.v1 as components  # keep this import near your other imports if not present
 
-    st.markdown(
-        '<div style="text-align:right; margin-top:-8px; margin-bottom:6px;">'
-        '<a class="cr-pill" href="javascript:window.print()">🧾 Print / Save as PDF</a>'
-        '</div>',
-        unsafe_allow_html=True
-    )
+    # Header row: title + print button (right-aligned)
+    hdr_l, hdr_r = st.columns([1, 0.28])
+    with hdr_l:
+        st.subheader("Report Mode")
+    with hdr_r:
+        components.html(
+            """
+            <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:2px;">
+            <button
+                onclick="(window.parent || window).print()"
+                style="
+                border:1px solid #E6E8EB; background:#fff; border-radius:999px;
+                padding:6px 12px; font-size:14px; cursor:pointer;
+                "
+            >🧾 Print / Save as PDF</button>
+            </div>
+            """,
+            height=46,
+        )
 
     # ----------- Local helpers (display)
     def _mask_pii(df_in: pd.DataFrame, do_mask: bool) -> pd.DataFrame:
