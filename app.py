@@ -73,13 +73,58 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+st.markdown(
+    """
+    <style>
+      /* Center the tab bar and allow wrapping on small screens */
+      .stTabs [role="tablist"] {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 4px 0 10px 0;
+      }
+
+      /* Make tabs look like pill buttons */
+      .stTabs [role="tab"] {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--text);
+        padding: 8px 14px;
+        font-weight: 600;
+        box-shadow: 0 1px 2px rgba(0,0,0,.04);
+      }
+      .stTabs [role="tab"]:hover {
+        border-color: rgba(14,116,144,.35);
+        transition: border-color .12s ease-in-out, box-shadow .12s ease-in-out, transform .02s;
+        transform: translateY(-1px);
+      }
+
+      /* Active (selected) tab: primary pill */
+      .stTabs [aria-selected="true"] {
+        background: var(--primary) !important;
+        color: #fff !important;
+        border-color: var(--primary) !important;
+        box-shadow: 0 2px 6px rgba(14,116,144,.25);
+      }
+
+      /* Slightly larger tab label text */
+      .stTabs [role="tab"] p {
+        font-size: 0.95rem;
+        margin: 0;
+      }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 st.markdown(
     f"""
     <div class="cr-hero">
       <h1>Credit Risk Intelligence Platform</h1>
-      <p>Stress, assess, and price credit risk with explainable metrics and reporting.</p>
-      <div class="cr-byline">by <b>{AUTHOR_SHORT}</b> <span style="opacity:.6;">•</span> {AUTHOR_TAGLINE}</div>
+      <p>Model, Stress, and Price credit portfolios—end-to-end PD/LGD/EAD analytics with CECL-ready reporting.</p>
+      <div class="cr-byline">by <b>{AUTHOR_FULL}</b> <span style="opacity:.6;">•</span> {AUTHOR_TAGLINE}</div>
       <div class="cr-chipstack">
         <span class="cr-pill">Python</span>
         <span class="cr-pill">Pandas</span>
@@ -434,6 +479,47 @@ with st.container():
         )
 
     st.markdown('</div>', unsafe_allow_html=True)
+    # --- About / Quick tour toggle (place this ABOVE the "Column glossary" expander) ---
+    st.session_state.setdefault("show_about", False)
+
+    if st.button(" App Guide / Instructions", use_container_width=True, key="btn_about"):
+        st.session_state["show_about"] = not st.session_state["show_about"]
+
+    if st.session_state["show_about"]:
+        st.markdown('<div class="cr-card">', unsafe_allow_html=True)
+        st.markdown("### Credit Risk Intelligence — Quick Instructions")
+        st.markdown(
+            """
+    **What you can do**
+    - Load your portfolio (or click **Use sample dataset**) and see KPIs instantly.
+    - Apply **Base / Adverse / Severe / Custom** scenarios to stress PD/LGD/EAD/EL.
+    - Track **covenant** headroom with **Green / Amber / Red** badges and a watchlist.
+    - Estimate **lifetime EL (CECL/IFRS)** with a discount rate.
+    - Convert risk to **pricing** (spread & all-in) and export CSVs.
+    - Generate a **print-ready report** for recruiters or stakeholders.
+
+    **What’s in each tab**
+    - **Overview** — Total EAD, W-avg PD, EL, High-risk share + quick charts.
+    - **Data** — First rows + derived metrics; flags rows that need fixes.
+    - **Base Risk** — PD / LGD / EAD / EL and **risk tiers** under current conditions.
+    - **Stress Test** — Same metrics under your scenario shocks (rates, unemployment, collateral).
+    - **Covenants & Watchlist** — Badges, headroom, “tightest” covenant, export exceptions.
+    - **CECL / IFRS** — Lifetime EL (PV) with amortization & monthly default hazard.
+    - **Pricing** — EL% + (capital + opex + profit) → **suggested spread** and **all-in**.
+    - **Reports** — One-click **Print / Save as PDF** (clean, recruiter-friendly).
+
+    **Inputs (expectations)**
+    - Use the **loan_template.csv** (download above) and keep the **same column headers**.
+    - **InterestRate is numeric** (use `0.075` or `7.5` for 7.5% — no `%` sign).
+    - Minimal required columns: `LoanAmount`, `InterestRate`, `TermMonths`: Fill all columns for accurracy.
+    - File size **≤ 200 MB**; export as **UTF-8, comma-delimited**.
+
+    **Notes**
+    - Models are **demo calibrated** (transparent, reproducible).
+    - **Mask IDs** in Report Mode with the “Mask sensitive IDs” toggle.
+            """
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # Quick glossary so users know what’s expected
     with st.expander("Column glossary", expanded=False):
