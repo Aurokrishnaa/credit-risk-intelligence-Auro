@@ -9,7 +9,7 @@
 
 **Repo:** [https://github.com/Aurokrishnaa/credit-risk-intelligence-Auro](https://github.com/Aurokrishnaa/credit-risk-intelligence-Auro)
 
-> Stress, assess, and price credit portfolios with explainable PD/LGD/EAD analytics, CECL/IFRS lifetime loss, covenant headroom, and a print-ready executive report—built in Python/Streamlit by **Aurokrishnaa R L (MS Finance—Quant · MBA Finance)**.
+> Stress, assess, and price credit portfolios with explainable PD/LGD/EAD analytics, CECL/IFRS lifetime loss, covenant headroom, and a print-ready executive report, built in Python/Streamlit by **Aurokrishnaa R L (MS Finance—Quant · MBA Finance)**.
 
 ---
 
