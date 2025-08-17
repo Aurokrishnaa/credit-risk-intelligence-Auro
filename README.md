@@ -67,19 +67,17 @@
 
 ## Screenshots
 
-> Add images to the repo at `Assets/` and these will render:
+![Landing — Hero](Assets/01-front-landing-hero.png)
+![Overview — Portfolio Snapshot (Severe)](Assets/02-overview-portfolio-snapshot-severe.png)
+![Overview — Key Visuals (Risk Tier & Top Sectors)](Assets/03-overview-key-visuals-risk-tier-and-top-sectors.png)
+![Data — Derived Metrics (Base)](Assets/04-data-derived-metrics-base.png)
+![Base Risk — 12m Table & KPIs](Assets/05-base-risk-12m-table-and-kpis.png)
+![Stress Test — Stressed Risk & Deltas](Assets/06-stress-test-stressed-risk-table-and-deltas.png)
+![Covenants & Watchlist — Headroom & Badges](Assets/07-covenants-watchlist-headroom-and-badges.png)
+![CECL / IFRS — Lifetime EL Summary](Assets/08-cecl-ifrs-lifetime-el-summary.png)
+![Pricing — Portfolio Metrics & Table](Assets/09-pricing-portfolio-metrics-and-table.png)
+![Report Mode — Assumptions & Highlights](Assets/10-report-mode-assumptions-and-highlights.png)
 
-* **Overview**
-  `Assets/overview.png`
-
-* **KPIs**
-  `Assets/kpis.png`
-
-* **Risk Tiers & Concentrations**
-  `Assets/tiers_concentrations.png`
-
-* **Pricing Table**
-  `Assets/pricing.png`
 
 ---
 
@@ -287,12 +285,12 @@ The app auto-selects **CurrentMarketValue** (if valid) else **CollateralValue** 
 
 ```
 credit-risk-intelligence-Auro/
-├─ .streamlit/              # Streamlit config/theme (optional)
+├─ .streamlit/              # Streamlit config/theme
 ├─ data/                    # Template/sample CSVs (written by the app)
 ├─ app.py                   # Main Streamlit application
 ├─ requirements.txt         # Python dependencies
 ├─ LICENSE                  # MIT
-└─ Assets/                  # (add screenshots here for README)
+└─ Assets/                  # Screenshots of the app
 ```
 
 > The app may create `reports/` at runtime for convenience; it is **not required** to be committed.
