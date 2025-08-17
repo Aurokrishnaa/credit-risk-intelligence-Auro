@@ -496,7 +496,7 @@ with st.container():
     - Track **covenant** headroom with **Green / Amber / Red** badges and a watchlist.
     - Estimate **lifetime EL (CECL/IFRS)** with a discount rate.
     - Convert risk to **pricing** (spread & all-in) and export CSVs.
-    - Generate a **print-ready report** for recruiters or stakeholders.
+    - Generate a **print-ready report with inputs and metrics**.
 
     **What’s in each tab**
     - **Overview** — Total EAD, W-avg PD, EL, High-risk share + quick charts.
@@ -506,7 +506,7 @@ with st.container():
     - **Covenants & Watchlist** — Badges, headroom, “tightest” covenant, export exceptions.
     - **CECL / IFRS** — Lifetime EL (PV) with amortization & monthly default hazard.
     - **Pricing** — EL% + (capital + opex + profit) → **suggested spread** and **all-in**.
-    - **Reports** — One-click **Print / Save as PDF** (clean, recruiter-friendly).
+    - **Reports** — One-click **Print / Save as PDF**.
 
     **Inputs (expectations)**
     - Use the **loan_template.csv** (download above) and keep the **same column headers**.
