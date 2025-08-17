@@ -6,6 +6,7 @@
 [![Status](https://img.shields.io/badge/Build-Production%20Demo-0E7490.svg)](#)
 
 **Live demo:** [https://credit-risk-intel-auro.streamlit.app](https://credit-risk-intel-auro.streamlit.app)
+
 **Repo:** [https://github.com/Aurokrishnaa/credit-risk-intelligence-Auro](https://github.com/Aurokrishnaa/credit-risk-intelligence-Auro)
 
 > Stress, assess, and price credit portfolios with explainable PD/LGD/EAD analytics, CECL/IFRS lifetime loss, covenant headroom, and a print-ready executive report—built in Python/Streamlit by **Aurokrishnaa R L (MS Finance—Quant · MBA Finance)**.
